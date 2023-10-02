@@ -20,9 +20,12 @@ def add_robot(request):
         form = RobotForm(data)
 
         if form.is_valid():
+            robot = form.save(commit=False)
+            robot.serial = f'{robot.model}-{robot.version}'
             robot = form.save()
+
             new_robot = {
-                "serial": f'{robot.model}-{robot.version}',
+                "serial": robot.serial,
                 "model": robot.model,
                 "version": robot.version,
                 "created": robot.created.strftime('%Y-%m-%d %H:%M:%S')
